@@ -20,4 +20,6 @@ mod tests {
         assert!(linear_search(&test_vec, 5));
         assert!(!linear_search(&test_vec, 6));
     }
+
+    // TODO Add random tests
 }
