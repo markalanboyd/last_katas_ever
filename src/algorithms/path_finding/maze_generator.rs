@@ -1,15 +1,16 @@
 use std::cell::Cell;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-enum CellType {
+pub enum CellType {
     Wall,
     Path,
+    PathSeen,
     Start,
     End,
 }
 
 pub struct Maze {
-    grid: Vec<Vec<CellType>>,
+    pub grid: Vec<Vec<CellType>>,
 }
 
 impl Maze {
@@ -54,9 +55,21 @@ impl Maze {
     pub fn find_end(&self) -> Option<Coordinate> {
         self.find_cell_type(CellType::End)
     }
+
+    pub fn row_len(&self) -> usize {
+        self.grid.len()
+    }
+
+    pub fn col_len(&self) -> usize {
+        self.grid.first().map_or(0, |row| row.len())
+    }
+
+    pub fn type_of(&self, curr: Coordinate) -> CellType {
+        self.grid[curr.row][curr.col]
+    }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Coordinate {
     pub row: usize,
     pub col: usize,
