@@ -11,8 +11,11 @@ impl<T> Queue<T> {
         self.queue.push(item)
     }
 
-    pub fn dequeue(&mut self) -> T {
-        self.queue.remove(0)
+    pub fn dequeue(&mut self) -> Option<T> {
+        match self.queue.get(0) {
+            Some(_) => Some(self.queue.remove(0)),
+            None => None,
+        }
     }
 
     pub fn length(&self) -> usize {
@@ -32,16 +35,37 @@ impl<T> Queue<T> {
 mod tests {
     use super::*;
 
-    // TODO Break out tests and add random tests.
+    #[test]
+    fn test_new_queue_is_empty() {
+        let queue: Queue<isize> = Queue::new();
+        assert!(queue.is_empty());
+    }
 
     #[test]
-    fn test_queue() {
+    fn test_enqueue_and_peek() {
+        let mut queue: Queue<isize> = Queue::new();
+        queue.enqueue(1);
+        assert_eq!(queue.peek(), Some(&1));
+    }
+
+    #[test]
+    fn test_enqueue_and_length() {
         let mut queue: Queue<isize> = Queue::new();
         queue.enqueue(1);
         assert_eq!(queue.length(), 1);
-        assert_eq!(queue.peek(), Some(&1));
-        let item = queue.dequeue();
-        assert_eq!(item, 1);
-        assert!(queue.is_empty())
+    }
+
+    #[test]
+    fn test_enqueue_and_dequeue() {
+        let mut queue: Queue<isize> = Queue::new();
+        queue.enqueue(1);
+        assert_eq!(queue.dequeue(), Some(1));
+        assert!(queue.is_empty());
+    }
+
+    #[test]
+    fn test_dequeue_empty() {
+        let mut queue: Queue<isize> = Queue::new();
+        assert_eq!(queue.dequeue(), None);
     }
 }
